@@ -7,17 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class VendorController extends Controller
 {
-    // ===================================================================
-    // FORM INPUT DOKUMEN BARU
-    // ===================================================================
     public function create()
     {
         return view('input-dokumen');
     }
 
-    // ===================================================================
-    // SIMPAN DOKUMEN BARU KE DATABASE
-    // ===================================================================
     public function store(Request $request)
     {
         $request->validate([
@@ -28,11 +22,9 @@ class VendorController extends Controller
             'file_pdf' => 'required|mimes:pdf|max:2048',
         ]);
 
-        // Simpan file PDF ke storage
         $fileName = time() . '_' . preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $request->file('file_pdf')->getClientOriginalName());
         $path = $request->file('file_pdf')->storeAs('dokumen_pdf', $fileName, 'public');
 
-        // Simpan data dokumen ke database
         DB::table('dokumen')->insert([
             'nomor_dokumen' => $request->nomor_dokumen,
             'tanggal_dokumen' => $request->tanggal_dokumen,
@@ -46,17 +38,11 @@ class VendorController extends Controller
         return back()->with('success', 'Dokumen berhasil disimpan.');
     }
 
-    // ===================================================================
-    // DASHBOARD USER (Halaman Awal)
-    // ===================================================================
     public function showDashboard()
     {
         return view('dashboarduser');
     }
 
-    // ===================================================================
-    // CARI DOKUMEN BERDASARKAN NOMOR + AMBIL HISTORI VERIFIKASI
-    // ===================================================================
     public function search(Request $request)
     {
         $request->validate([
@@ -65,14 +51,12 @@ class VendorController extends Controller
 
         $nomor = $request->input('nomor_dokumen');
 
-        // Ambil dokumen berdasarkan nomor dokumen
         $dokumen = DB::table('dokumen')
             ->where('nomor_dokumen', $nomor)
             ->first();
 
         $histori = [];
 
-        // Jika dokumen ditemukan, ambil histori verifikasinya
         if ($dokumen) {
             $histori = DB::table('histori_verifikasi')
                 ->where('dokumen_id', $dokumen->id)
@@ -80,22 +64,15 @@ class VendorController extends Controller
                 ->get();
         }
 
-        // Kirim ke view
         return view('dashboarduser', compact('dokumen', 'histori'));
     }
 
-    // ===================================================================
-    // TAMPILKAN SEMUA DOKUMEN
-    // ===================================================================
     public function index()
     {
         $dokumen = DB::table('dokumen')->get();
         return view('index', compact('dokumen'));
     }
 
-    // ===================================================================
-    // TAMPILKAN FILE PDF
-    // ===================================================================
     public function showFile($id)
     {
         $dokumen = DB::table('dokumen')->where('id', $id)->first();

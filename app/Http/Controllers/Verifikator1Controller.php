@@ -6,6 +6,7 @@ use App\Models\Dokumen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+
 class Verifikator1Controller extends Controller
 {
     public function index()
@@ -23,20 +24,18 @@ class Verifikator1Controller extends Controller
     public function setujui($id)
     {
         $dokumen = Dokumen::findOrFail($id);
-        
+
         $tanggalMasuk = $dokumen->updated_at;
 
-        // 1. Update status dokumen
         $dokumen->status_verifikasi = 'Disetujui Verifikator 1';
         $dokumen->save();
 
-        // 2. Simpan histori verifikasi (TANPA created_at dan updated_at)
         DB::table('histori_verifikasi')->insert([
             'dokumen_id' => $id,
             'posisi' => 'Verifikator 1',
-            'verifikator' => 'Nama Verifikator 1', // Ganti dengan data user yang login, contoh: auth()->user()->name
+            'verifikator' => 'Nama Verifikator 1',
             'tanggal_masuk' => $tanggalMasuk,
-            'tanggal_keluar' => now(), // Waktu saat ini
+            'tanggal_keluar' => now(),
             'catatan' => 'Dokumen telah disetujui oleh Verifikator 1.',
         ]);
 
@@ -45,22 +44,24 @@ class Verifikator1Controller extends Controller
 
     public function tolak(Request $request, $id)
     {
-        $request->validate(['keterangan' => 'required|string|max:255']);
-
+        $request->validate([
+            'keterangan' => 'required|string|max:255',
+        ], [
+            'keterangan.required' => 'Kolom alasan penolakan wajib diisi.',
+        ]);
+        
         $dokumen = Dokumen::findOrFail($id);
 
         $tanggalMasuk = $dokumen->updated_at;
-        
-        // 1. Update status dokumen
+
         $dokumen->status_verifikasi = 'Ditolak Verifikator 1';
         $dokumen->keterangan = $request->keterangan;
         $dokumen->save();
 
-        // 2. Simpan histori verifikasi (TANPA created_at dan updated_at)
         DB::table('histori_verifikasi')->insert([
             'dokumen_id' => $id,
             'posisi' => 'Verifikator 1',
-            'verifikator' => 'Nama Verifikator 1', // Ganti dengan data user yang login, contoh: auth()->user()->name
+            'verifikator' => 'Nama Verifikator 1',
             'tanggal_masuk' => $tanggalMasuk,
             'tanggal_keluar' => now(),
             'catatan' => $request->keterangan,

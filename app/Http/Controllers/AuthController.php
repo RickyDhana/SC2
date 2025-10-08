@@ -20,7 +20,6 @@ class AuthController extends Controller
         if ($user && Hash::check($request->password, $user->password)) {
             session(['user' => $user]);
 
-            // Arahkan berdasarkan role
             switch ($user->role) {
                 case 'vendor':
                     return redirect()->route('vendor.create');
@@ -30,8 +29,6 @@ class AuthController extends Controller
                     return redirect()->route('v2.index');
                 case 'verifikator3':
                     return redirect()->route('v3.index');
-                case 'verifikator4':
-                    return redirect()->route('v4.index');
                 default:
                     return redirect()->route('login')->with('error', 'Role tidak dikenali.');
             }

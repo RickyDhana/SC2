@@ -4,16 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Dokumen - Penera</title>
+    <title>PT PAL - Input Dokumen</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/PAL.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 </head>
 
 <body class="bg-gray-300 font-sans">
-
-    {{-- Header --}}
-    <header class="bg-gradient-to-r from-[#1a2641] to-[#0a1730] shadow-md">
+    <header class="bg-gradient-to-r from-[#1c2e55] to-[#0a1730] shadow-md p-0 flex justify-between">
         <div class="container mx-auto flex justify-between items-center px-6 py-5">
             <div>
                 <img src="{{ asset('images/pal-logo.png') }}" alt="PAL Indonesia" class="h-12 md:h-14">
@@ -31,25 +30,28 @@
 
     <div class="flex">
         <aside
-            class="group left-0 bg-gradient-to-b from-[#1a2641] to-[#0a1730] text-white h-[calc(100vh-96px)] flex flex-col transition-all duration-300 w-24 hover:w-64">
+            class="group left-0 bg-gradient-to-b from-[#0a1730] to-[#1c2e55] text-white h-[calc(100vh-96px)] flex flex-col transition-all duration-300 w-24 hover:w-64">
             <nav class="flex flex-col justify-between h-full w-full px-6 pt-8">
                 <div class="flex flex-col space-y-8">
                     <a href="{{ url('dashboard') }}"
                         class="flex items-center space-x-4 p-2 rounded-md hover:bg-black/25 transition-all duration-200 {{ request()->is('dashboarduser') ? 'border-b-2 border-white' : '' }}">
                         <i class="fas fa-search text-2xl pr-2"></i>
-                        <span class="w-0 overflow-hidden group-hover:w-auto group-hover:opacity-100 transition-all duration-300 font-medium whitespace-nowrap">Cek Dokumen</span>
+                        <span
+                            class="w-0 overflow-hidden group-hover:w-auto group-hover:opacity-100 transition-all duration-300 font-medium whitespace-nowrap">Cek
+                            Dokumen</span>
                     </a>
 
                     <a href="{{ url('/input-dokumen') }}"
                         class="flex items-center space-x-4 p-2 rounded-md hover:bg-black/25 transition-all duration-200 {{ request()->is('input-dokumen') ? 'border-b-2 border-white' : '' }}">
                         <i class="fas fa-file-upload text-2xl pr-2"></i>
-                        <span class="w-0 overflow-hidden group-hover:w-auto group-hover:opacity-100 transition-all duration-300 font-medium whitespace-nowrap">Input Dokumen</span>
+                        <span
+                            class="w-0 overflow-hidden group-hover:w-auto group-hover:opacity-100 transition-all duration-300 font-medium whitespace-nowrap">Input
+                            Dokumen</span>
                     </a>
                 </div>
             </nav>
         </aside>
 
-        {{-- Main Content --}}
         <main class="flex-1 p-10">
             <div class="bg-white p-8 rounded-lg shadow-lg">
 
@@ -105,17 +107,17 @@
     </div>
 
     <script>
-    const fileInput = document.querySelector('input[name="file_pdf"]');
-    const labelText = document.querySelector('.file-name');
+        const fileInput = document.querySelector('input[name="file_pdf"]');
+        const labelText = document.querySelector('.file-name');
 
-    fileInput.addEventListener('change', function () {
-        if (this.files && this.files.length > 0) {
-            labelText.textContent = this.files[0].name;
-        } else {
-            labelText.textContent = 'Pilih PDF';
-        }
-    });
-</script>
+        fileInput.addEventListener('change', function () {
+            if (this.files && this.files.length > 0) {
+                labelText.textContent = this.files[0].name;
+            } else {
+                labelText.textContent = 'Pilih PDF';
+            }
+        });
+    </script>
 
 
 
