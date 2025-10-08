@@ -6,7 +6,6 @@ use App\Models\Dokumen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
 class Verifikator1Controller extends Controller
 {
     public function index()
@@ -49,7 +48,7 @@ class Verifikator1Controller extends Controller
         ], [
             'keterangan.required' => 'Kolom alasan penolakan wajib diisi.',
         ]);
-        
+
         $dokumen = Dokumen::findOrFail($id);
 
         $tanggalMasuk = $dokumen->updated_at;

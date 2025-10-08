@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
 {
     Schema::create('dokumen', function (Blueprint $table) {
@@ -17,15 +14,11 @@ return new class extends Migration
         $table->date('tanggal_dokumen');
         $table->string('perihal');
         $table->string('tujuan');
-        $table->string('file_pdf')->nullable(); // ✅ Tambahkan ini
+        $table->string('file_pdf')->nullable();
         $table->timestamps();
     });
 }
 
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('dokumen');
