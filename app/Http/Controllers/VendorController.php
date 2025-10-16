@@ -4,20 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class VendorController extends Controller
 {
+    // 🧩 Halaman form input dokumen
     public function create()
     {
-        return view('input-dokumen');
+        $jurubelis = User::where('role', 'jurubeli')->pluck('name', 'id');
+        return view('input-dokumen', compact('jurubelis'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nomor_dokumen' => 'required',
-            'tanggal_dokumen' => 'required|date',
-            'perihal' => 'required',
+            'pekerjaan' => 'required',
             'tujuan' => 'required',
             'file_pdf' => 'required|mimes:pdf|max:2048',
         ]);
@@ -26,16 +28,17 @@ class VendorController extends Controller
         $path = $request->file('file_pdf')->storeAs('dokumen_pdf', $fileName, 'public');
 
         DB::table('dokumen')->insert([
-            'nomor_dokumen' => $request->nomor_dokumen,
-            'tanggal_dokumen' => $request->tanggal_dokumen,
-            'perihal' => $request->perihal,
-            'tujuan' => $request->tujuan,
-            'file_pdf' => $path,
-            'created_at' => now(),
-            'updated_at' => now(),
+            'nomor_dokumen'      => $request->nomor_dokumen,
+            'tanggal_dokumen'    => now()->toDateString(),
+            'pekerjaan'          => $request->pekerjaan,
+            'tujuan'             => $request->tujuan,
+            'file_pdf'           => $path,
+            'status_verifikasi'  => 'Menunggu Jurubeli 1',
+            'created_at'         => now(),
+            'updated_at'         => now(),
         ]);
 
-        return back()->with('success', 'Dokumen berhasil disimpan.');
+        return back()->with('success', 'Dokumen berhasil disimpan dan menunggu verifikasi Jurubeli 1.');
     }
 
     public function showDashboard()
@@ -67,12 +70,14 @@ class VendorController extends Controller
         return view('dashboarduser', compact('dokumen', 'histori'));
     }
 
+    // 🧩 Daftar semua dokumen
     public function index()
     {
         $dokumen = DB::table('dokumen')->get();
         return view('index', compact('dokumen'));
     }
 
+    // 🧩 Tampilkan file PDF
     public function showFile($id)
     {
         $dokumen = DB::table('dokumen')->where('id', $id)->first();

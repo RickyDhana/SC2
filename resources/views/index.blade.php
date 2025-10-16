@@ -60,7 +60,7 @@
                         <th class="px-4 py-3 font-semibold text-center tracking-wider">No</th>
                         <th class="px-4 py-3 font-semibold text-left tracking-wider">No Dokumen</th>
                         <th class="px-4 py-3 font-semibold text-left tracking-wider">Tanggal Dokumen</th>
-                        <th class="px-4 py-3 font-semibold text-left tracking-wider">Perihal</th>
+                        <th class="px-4 py-3 font-semibold text-left tracking-wider">Pekerjaan</th>
                         <th class="px-4 py-3 font-semibold text-center tracking-wider">Tujuan</th>
 
                     </tr>
@@ -71,7 +71,7 @@
                         <td class="px-4 py-3 text-left">{{ $item->nomor_dokumen }}</td>
                         <td class="px-4 py-3 text-left">{{ \Carbon\Carbon::parse($item->tanggal_dokumen)->format('d F Y') }}
                         </td>
-                        <td class="px-4 py-3 text-left">{{ $item->perihal }}</td>
+                        <td class="px-4 py-3 text-left">{{ $item->pekerjaan }}</td>
                         <td class="px-4 py-3 text-center">{{ $item->tujuan }}</td>
                     </tr>
                 @endforeach

@@ -23,12 +23,16 @@ class AuthController extends Controller
             switch ($user->role) {
                 case 'vendor':
                     return redirect()->route('vendor.create');
-                case 'verifikator1':
-                    return redirect()->route('v1.index');
-                case 'verifikator2':
+                case 'jurubeli':
+                    return redirect()->route('j1.index');
+                case 'jurubeli':
+                    return redirect()->route('j2.index');
+                case 'kepala_biro':
                     return redirect()->route('v2.index');
-                case 'verifikator3':
+                case 'kepala_departemen':
                     return redirect()->route('v3.index');
+                case 'kepala_divisi':
+                    return redirect()->route('v4.index');
                 default:
                     return redirect()->route('login')->with('error', 'Role tidak dikenali.');
             }

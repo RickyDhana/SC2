@@ -73,8 +73,8 @@
                                     class="w-full border-gray-300 rounded-md shadow-sm bg-gray-100" readonly>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Perihal</label>
-                                <input type="text" value="{{ $dokumen->perihal }}"
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Pekerjaan</label>
+                                <input type="text" value="{{ $dokumen->pekerjaan }}"
                                     class="w-full border-gray-300 rounded-md shadow-sm bg-gray-100" readonly>
                             </div>
                             <div>
@@ -86,7 +86,7 @@
                             <div><label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Dokumen</label><input
                                     type="text" class="w-full border-gray-300 rounded-md shadow-sm bg-gray-100"
                                     placeholder="-" readonly></div>
-                            <div><label class="block text-sm font-medium text-gray-700 mb-1">Perihal</label><input
+                            <div><label class="block text-sm font-medium text-gray-700 mb-1">Pekerjaan</label><input
                                     type="text" class="w-full border-gray-300 rounded-md shadow-sm bg-gray-100"
                                     placeholder="-" readonly></div>
                             <div><label class="block text-sm font-medium text-gray-700 mb-1">Tujuan</label><input
@@ -117,15 +117,15 @@
                 @endif
             </div>
 
+            <!-- Modal PDF -->
             <div id="pdfModal"
-                class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-                <div class="bg-white rounded-lg shadow-lg w-11/12 md:w-3/4 h-5/6 relative">
-                    <button onclick="closePdfModal()"
-                        class="absolute top-2 right-1 text-gray-700 hover:text-red-600 text-2xl font-bold">&times;</button>
+                class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+                onclick="closePdfModal(event)">
+                <div class="bg-white rounded-lg shadow-lg w-11/12 md:w-3/4 h-5/6 relative"
+                    onclick="event.stopPropagation()">
                     <iframe id="pdfViewer" src="" class="w-full h-full rounded-b-lg" frameborder="0"></iframe>
                 </div>
             </div>
-
 
             <div class="bg-white rounded-lg shadow-md">
                 <div class="p-6">
@@ -134,24 +134,25 @@
                     @if(isset($histori) && count($histori) > 0)
                         @php
                             $flow_status = [
-                                'Verifikator 1' => 'pending',
-                                'Verifikator 2' => 'pending',
-                                'Verifikator 3' => 'pending',
+                                'Juru Beli' => 'pending',
+                                'Kepala Biro' => 'pending',
+                                'Kepala Departemen' => 'pending',
+                                'Kepala Divisi' => 'pending',
                             ];
                             foreach ($histori as $h) {
                                 if (isset($flow_status[$h->posisi])) {
                                     $flow_status[$h->posisi] = 'approved';
                                 }
                             }
-                            if (str_contains($dokumen->status_verifikasi, 'Ditolak Verifikator 1'))
-                                $flow_status['Verifikator 1'] = 'rejected';
-                            if (str_contains($dokumen->status_verifikasi, 'Ditolak Verifikator 2'))
-                                $flow_status['Verifikator 2'] = 'rejected';
-                            if (str_contains($dokumen->status_verifikasi, 'Ditolak Verifikator 3'))
-                                $flow_status['Verifikator 3'] = 'rejected';
+                            if (str_contains($dokumen->status_verifikasi, 'Ditolak Juru Beli'))
+                                $flow_status['Juru Beli'] = 'rejected';
+                            if (str_contains($dokumen->status_verifikasi, 'Ditolak Kepala Biro'))
+                                $flow_status['Kepala Biro'] = 'rejected';
+                            if (str_contains($dokumen->status_verifikasi, 'Ditolak Kepala Departemen'))
+                                $flow_status['Kepala Departemen'] = 'rejected';
                         @endphp
-                        <div class="w-full max-w-3xl mx-auto mb-8 p-4 rounded-lg">
-                            <div class="flex items-center justify-between">
+                        <div class="w-full max-w-5xl mx-auto mb-8 p-4 rounded-lg">
+                            <div class="flex items-center">
                                 @foreach($flow_status as $verifier => $status)
                                     @php
                                         $color_class = 'bg-gray-400 text-white';
@@ -161,28 +162,23 @@
                                             $color_class = 'bg-red-600 text-white';
                                         }
                                     @endphp
-
-                                    <div class="flex-1 text-center">
-                                        <div class="w-full flex justify-center">
-                                            <div class="px-5 py-2 rounded-full shadow-md font-semibold {{ $color_class }}">
-                                                {{ $verifier }}
-                                            </div>
+                                    <div class="flex-shrink-0 text-center">
+                                        <div class="px-5 py-2 rounded-full shadow-md font-semibold {{ $color_class }}">
+                                            {{ $verifier }}
                                         </div>
                                     </div>
-
                                     @if(!$loop->last)
-                                        <div class="flex-shrink-0 w-12 sm:w-16 h-1 bg-gray-300"></div>
+                                        <div class="flex-1 h-1 bg-gray-300 mx-4"></div>
                                     @endif
                                 @endforeach
                             </div>
                         </div>
-
                         <div class="overflow-x-auto">
                             <table class="min-w-full text-sm border">
                                 <thead class="bg-[#1a2641] text-white">
                                     <tr>
                                         <th class="py-3 px-4 text-left">Posisi</th>
-                                        <th class="py-3 px-4 text-left">Verifikator</th>
+                                        <th class="py-3 px-4 text-left">Juru Beli</th>
                                         <th class="py-3 px-4 text-left">Masuk</th>
                                         <th class="py-3 px-4 text-left">Keluar</th>
                                         <th class="py-3 px-4 text-left">Catatan</th>
@@ -226,11 +222,14 @@
             modal.classList.remove('hidden');
         }
 
-        function closePdfModal() {
+        function closePdfModal(event) {
             const modal = document.getElementById('pdfModal');
             const viewer = document.getElementById('pdfViewer');
-            viewer.src = "";
-            modal.classList.add('hidden');
+
+            if (event.target === modal) {
+                viewer.src = "";
+                modal.classList.add('hidden');
+            }
         }
     </script>
 </body>

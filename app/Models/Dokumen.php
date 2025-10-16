@@ -14,7 +14,7 @@ class Dokumen extends Model
     protected $fillable = [
         'nomor_dokumen',
         'tanggal_dokumen',
-        'perihal',
+        'pekerjaan',
         'tujuan',
         'file_path',
     ];
