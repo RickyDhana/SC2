@@ -12,6 +12,7 @@
 </head>
 
 <body class="bg-gray-300 font-sans">
+
     {{-- HEADER --}}
     <header class="bg-gradient-to-r from-[#1c2e55] to-[#0a1730] shadow-md p-0 flex justify-between">
         <div class="container mx-auto flex justify-between items-center px-6 py-5">
@@ -36,7 +37,7 @@
             <nav class="flex flex-col justify-between h-full w-full px-6 pt-8">
                 <div class="flex flex-col space-y-8">
                     <a href="{{ url('dashboard') }}"
-                        class="flex items-center space-x-4 p-2 rounded-md hover:bg-black/25 transition-all duration-200 {{ request()->is('dashboarduser') ? 'border-b-2 border-white' : '' }}">
+                        class="flex items-center space-x-4 p-2 rounded-md hover:bg-black/25 transition-all duration-200">
                         <i class="fas fa-search text-2xl pr-2"></i>
                         <span
                             class="w-0 overflow-hidden group-hover:w-auto group-hover:opacity-100 transition-all duration-300 font-medium whitespace-nowrap">Cek
@@ -44,7 +45,7 @@
                     </a>
 
                     <a href="{{ url('/input-dokumen') }}"
-                        class="flex items-center space-x-4 p-2 rounded-md hover:bg-black/25 transition-all duration-200 {{ request()->is('input-dokumen') ? 'border-b-2 border-white' : '' }}">
+                        class="flex items-center space-x-4 p-2 rounded-md hover:bg-black/25 transition-all duration-200 border-b-2 border-white">
                         <i class="fas fa-file-upload text-2xl pr-2"></i>
                         <span
                             class="w-0 overflow-hidden group-hover:w-auto group-hover:opacity-100 transition-all duration-300 font-medium whitespace-nowrap">Input
@@ -57,12 +58,10 @@
         {{-- MAIN CONTENT --}}
         <main class="flex-1 p-10">
             <div class="bg-white p-8 rounded-lg shadow-lg">
-
                 <form id="uploadForm" action="{{ route('vendor.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-
                         <!-- Nomor Dokumen -->
                         <div>
                             <label for="nomor_dokumen" class="block text-sm font-semibold text-gray-800 mb-2">
@@ -85,12 +84,14 @@
 
                         <!-- Tujuan -->
                         <div>
-                            <label for="tujuan" class="block text-sm font-semibold text-gray-800 mb-2">Tujuan (Juru Beli)</label>
-                            <select id="tujuan" name="tujuan"
+                            <label for="tujuan" class="block text-sm font-semibold text-gray-800 mb-2">
+                                Tujuan (Juru Beli)
+                            </label>
+                            <select id="tujuan" name="tujuan" required
                                 class="w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                                 <option value="" disabled selected>Pilih Tujuan</option>
-                                @foreach ($jurubelis as $id => $name)
-                                    <option value="{{ $name }}">{{ $name }}</option>
+                                @foreach($jurubelis as $role => $name)
+                                    <option value="{{ $role }}">{{ $name }}</option>
                                 @endforeach
                             </select>
                             <p id="errorTujuan" class="text-red-600 text-sm hidden mt-1">Harap pilih Tujuan.</p>
@@ -122,8 +123,62 @@
         </main>
     </div>
 
+    <!-- POPUP KONFIRMASI -->
+    <div id="confirmPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl shadow-lg p-6 w-96 text-center">
+            <h2 class="text-lg font-bold mb-3 text-gray-800">Konfirmasi Data</h2>
+            <p class="text-sm text-gray-600 mb-4">Pastikan data yang kamu isi sudah benar sebelum dikirim:</p>
+            <div class="text-left text-gray-700 space-y-1 mb-5">
+                <p><b>Nomor Dokumen:</b> <span id="confirmNomor"></span></p>
+                <p><b>Pekerjaan:</b> <span id="confirmPekerjaan"></span></p>
+                <p><b>Tujuan:</b> <span id="confirmTujuan"></span></p>
+                <p><b>File:</b> <span id="confirmFile"></span></p>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button id="cancelBtn"
+                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md">Batal</button>
+                <button id="confirmBtn"
+                    class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md">Kirim Sekarang</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP SUKSES -->
+    <div id="successPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-xl shadow-lg p-6 w-80 text-center animate-fadeIn">
+            <div class="flex justify-center mb-4">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-check text-green-600 text-3xl animate-bounce"></i>
+                </div>
+            </div>
+            <h2 class="text-lg font-bold text-gray-800">Data Berhasil Dikirim!</h2>
+            <p class="text-sm text-gray-600 mt-2">Dokumen kamu telah berhasil diupload.</p>
+            <button id="okBtn"
+                class="mt-5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">OK</button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.3s ease-in-out; }
+    </style>
+
     <script>
         const form = document.getElementById('uploadForm');
+        const popup = document.getElementById('confirmPopup');
+        const successPopup = document.getElementById('successPopup');
+        const confirmNomor = document.getElementById('confirmNomor');
+        const confirmPekerjaan = document.getElementById('confirmPekerjaan');
+        const confirmTujuan = document.getElementById('confirmTujuan');
+        const confirmFile = document.getElementById('confirmFile');
+
+        const cancelBtn = document.getElementById('cancelBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const okBtn = document.getElementById('okBtn');
+
         const fileInput = document.getElementById('file_pdf');
         const fileLabel = document.querySelector('.file-name');
 
@@ -147,36 +202,44 @@
             if (fileInput.files.length > 0) errors.file.classList.add('hidden');
         });
 
-        // validasi saat submit
+        // validasi dan tampilkan popup konfirmasi
         form.addEventListener('submit', (e) => {
+            e.preventDefault();
             let valid = true;
 
-            // cek nomor dokumen
-            if (fields.nomor.value.trim() === '') {
-                errors.nomor.classList.remove('hidden');
-                valid = false;
-            } else errors.nomor.classList.add('hidden');
+            // validasi field
+            if (fields.nomor.value.trim() === '') { errors.nomor.classList.remove('hidden'); valid = false; } 
+            else errors.nomor.classList.add('hidden');
+            if (fields.pekerjaan.value.trim() === '') { errors.pekerjaan.classList.remove('hidden'); valid = false; } 
+            else errors.pekerjaan.classList.add('hidden');
+            if (!fields.tujuan.value) { errors.tujuan.classList.remove('hidden'); valid = false; } 
+            else errors.tujuan.classList.add('hidden');
+            if (!fields.file.files.length) { errors.file.classList.remove('hidden'); valid = false; } 
+            else errors.file.classList.add('hidden');
 
-            // cek pekerjaan
-            if (fields.pekerjaan.value.trim() === '') {
-                errors.pekerjaan.classList.remove('hidden');
-                valid = false;
-            } else errors.pekerjaan.classList.add('hidden');
+            if (valid) {
+                confirmNomor.textContent = fields.nomor.value;
+                confirmPekerjaan.textContent = fields.pekerjaan.value;
+                confirmTujuan.textContent = fields.tujuan.options[fields.tujuan.selectedIndex].text;
+                confirmFile.textContent = fields.file.files[0]?.name || '-';
+                popup.classList.remove('hidden');
+            }
+        });
 
-            // cek tujuan
-            if (!fields.tujuan.value) {
-                errors.tujuan.classList.remove('hidden');
-                valid = false;
-            } else errors.tujuan.classList.add('hidden');
+        cancelBtn.addEventListener('click', () => popup.classList.add('hidden'));
 
-            // cek file
-            if (!fields.file.files.length) {
-                errors.file.classList.remove('hidden');
-                valid = false;
-            } else errors.file.classList.add('hidden');
+        // saat menekan "Kirim Sekarang"
+        confirmBtn.addEventListener('click', (e) => {
+            popup.classList.add('hidden');
+            // simulasi upload sukses (bisa diganti ajax)
+            setTimeout(() => {
+                successPopup.classList.remove('hidden');
+            }, 600);
+        });
 
-            // cegah kirim jika ada error
-            if (!valid) e.preventDefault();
+        okBtn.addEventListener('click', () => {
+            successPopup.classList.add('hidden');
+            form.submit(); // kirim form ke server
         });
     </script>
 </body>
