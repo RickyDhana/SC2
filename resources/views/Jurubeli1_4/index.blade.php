@@ -189,7 +189,7 @@
     <script>
         // === MODAL DETAIL ===
         function openDetailModal(id) {
-            fetch(`/Jurubeli1_3/${id}/json`)
+            fetch(`/Jurubeli1_4/${id}/json`)
                 .then(res => res.json())
                 .then(data => {
                     document.getElementById('nomor').textContent = data.nomor_dokumen;
@@ -200,8 +200,8 @@
 
                     document.getElementById('btnLihatPdf').onclick = () => openPdfModal(`/dokumen/${data.id}/view`);
 
-                    document.getElementById('formSetujui').action = `/Jurubeli1_3/${data.id}/setujui`;
-                    document.getElementById('formTolak').action = `/Jurubeli1_3/${data.id}/tolak`;
+                    document.getElementById('formSetujui').action = `/Jurubeli1_4/${data.id}/setujui`;
+                    document.getElementById('formTolak').action = `/Jurubeli1_4/${data.id}/tolak`;
 
                     const modal = document.getElementById('detailModal');
                     const modalContent = modal.querySelector('.max-w-2xl');

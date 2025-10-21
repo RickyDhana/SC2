@@ -106,9 +106,11 @@
                                 class="flex items-center border border-dashed border-gray-400 rounded-md px-4 py-2 cursor-pointer hover:bg-gray-100 transition">
                                 <i class="fas fa-cloud-upload-alt mr-2 text-gray-600 text-lg"></i>
                                 <span class="file-name text-gray-700 font-normal text-sm tracking-wide">Pilih PDF</span>
-                                <input type="file" id="file_pdf" name="file_pdf" accept="application/pdf" class="hidden">
+                                <input type="file" id="file_pdf" name="file_pdf" accept="application/pdf"
+                                    class="hidden">
                             </label>
-                            <p id="errorFile" class="text-red-600 text-sm hidden mt-1">Harap pilih file PDF sebelum upload.</p>
+                            <p id="errorFile" class="text-red-600 text-sm hidden mt-1">Harap pilih file PDF sebelum
+                                upload.</p>
                         </div>
                     </div>
 
@@ -124,46 +126,85 @@
     </div>
 
     <!-- POPUP KONFIRMASI -->
-    <div id="confirmPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-xl shadow-lg p-6 w-96 text-center">
-            <h2 class="text-lg font-bold mb-3 text-gray-800">Konfirmasi Data</h2>
-            <p class="text-sm text-gray-600 mb-4">Pastikan data yang kamu isi sudah benar sebelum dikirim:</p>
-            <div class="text-left text-gray-700 space-y-1 mb-5">
-                <p><b>Nomor Dokumen:</b> <span id="confirmNomor"></span></p>
-                <p><b>Pekerjaan:</b> <span id="confirmPekerjaan"></span></p>
-                <p><b>Tujuan:</b> <span id="confirmTujuan"></span></p>
-                <p><b>File:</b> <span id="confirmFile"></span></p>
+    <div id="confirmPopup"
+        class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm">
+            <div class="flex flex-col items-center">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-exclamation-circle text-blue-600 text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-extrabold mb-2 text-gray-900">Konfirmasi Data</h2>
+                <p class="text-sm text-gray-500 mb-6 border-b pb-4 w-full text-center">Pastikan semua data sudah benar
+                    sebelum dikirim.</p>
             </div>
-            <div class="flex justify-center space-x-4">
-                <button id="cancelBtn"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md">Batal</button>
+
+            <div class="text-left text-gray-700 space-y-3 mb-8">
+                <div class="flex justify-between items-start">
+                    <p class="font-medium text-gray-600 w-2/5 whitespace-nowrap">Nomor Dokumen</p>
+                    <p class="font-semibold text-gray-800 w-3/5 text-right" id="confirmNomor"></p>
+                </div>
+                <div class="flex justify-between items-start">
+                    <p class="font-medium text-gray-600 w-2/5">Pekerjaan</p>
+                    <p class="font-semibold text-gray-800 w-3/5 text-right" id="confirmPekerjaan"></p>
+                </div>
+                <div class="flex justify-between items-start">
+                    <p class="font-medium text-gray-600 w-2/5">Tujuan</p>
+                    <p class="font-semibold text-gray-800 w-3/5 text-right" id="confirmTujuan"></p>
+                </div>
+                <div class="flex justify-between items-start">
+                    <p class="font-medium text-gray-600 w-2/5">File</p>
+                    <p class="font-semibold text-blue-700 w-3/5 text-right" id="confirmFile"></p>
+                </div>
+            </div>
+
+            <div class="flex flex-col space-y-3">
                 <button id="confirmBtn"
-                    class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md">Kirim Sekarang</button>
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition duration-200 shadow-md shadow-blue-300">
+                    Kirim Sekarang
+                    <i class="fas fa-paper-plane ml-2"></i>
+                </button>
+                <button id="cancelBtn"
+                    class="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-medium py-3 rounded-xl transition duration-200">
+                    Batal
+                </button>
             </div>
         </div>
     </div>
 
     <!-- POPUP SUKSES -->
-    <div id="successPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-xl shadow-lg p-6 w-80 text-center animate-fadeIn">
+    <div id="successPopup"
+        class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-xs text-center animate-fadeIn">
             <div class="flex justify-center mb-4">
                 <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                    <i class="fas fa-check text-green-600 text-3xl animate-bounce"></i>
+                    <i class="fas fa-check-circle text-green-600 text-3xl"></i>
                 </div>
             </div>
-            <h2 class="text-lg font-bold text-gray-800">Data Berhasil Dikirim!</h2>
-            <p class="text-sm text-gray-600 mt-2">Dokumen kamu telah berhasil diupload.</p>
+            <h2 class="text-xl font-extrabold text-gray-900 mt-2">Berhasil!</h2>
+            <p class="text-sm text-gray-500 mt-2">Dokumen telah berhasil diupload dan dikirim.</p>
             <button id="okBtn"
-                class="mt-5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">OK</button>
+                class="mt-6 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition duration-200 shadow-md shadow-green-300">
+                Selesai
+            </button>
         </div>
     </div>
 
     <style>
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
-        .animate-fadeIn { animation: fadeIn 0.3s ease-in-out; }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-in-out;
+        }
     </style>
 
     <script>
@@ -208,13 +249,13 @@
             let valid = true;
 
             // validasi field
-            if (fields.nomor.value.trim() === '') { errors.nomor.classList.remove('hidden'); valid = false; } 
+            if (fields.nomor.value.trim() === '') { errors.nomor.classList.remove('hidden'); valid = false; }
             else errors.nomor.classList.add('hidden');
-            if (fields.pekerjaan.value.trim() === '') { errors.pekerjaan.classList.remove('hidden'); valid = false; } 
+            if (fields.pekerjaan.value.trim() === '') { errors.pekerjaan.classList.remove('hidden'); valid = false; }
             else errors.pekerjaan.classList.add('hidden');
-            if (!fields.tujuan.value) { errors.tujuan.classList.remove('hidden'); valid = false; } 
+            if (!fields.tujuan.value) { errors.tujuan.classList.remove('hidden'); valid = false; }
             else errors.tujuan.classList.add('hidden');
-            if (!fields.file.files.length) { errors.file.classList.remove('hidden'); valid = false; } 
+            if (!fields.file.files.length) { errors.file.classList.remove('hidden'); valid = false; }
             else errors.file.classList.add('hidden');
 
             if (valid) {
@@ -243,4 +284,5 @@
         });
     </script>
 </body>
+
 </html>
