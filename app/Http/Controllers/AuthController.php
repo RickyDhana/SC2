@@ -56,19 +56,19 @@ class AuthController extends Controller
 
                 //Kepala Biro 
                 case 'Kepala_Biro_1':
-                    return redirect()->route('v1.index');
+                    return redirect()->route('Kepalabiro1_1.index');
                 case 'Kepala_Biro_2':
-                    return redirect()->route('v2.index');
+                    return redirect()->route('Kepalabiro1_2.index');
                 case 'Kepala_Biro_3':
-                    return redirect()->route('v3.index');
+                    return redirect()->route('Kepalabiro1_3.index');
 
                 //Kepala Departemen
                 case 'Kepala_Departemen':
-                    return redirect()->route('v4.index');
+                    return redirect()->route('KepalaDepartemen.index');
 
                 //Kepala Divisi
                 case 'Kepala_Divisi':
-                    return redirect()->route('v5.index');
+                    return redirect()->route('KepalaDivisi.index');
 
                 default:
                     return redirect()->route('login')->with('error', 'Role tidak dikenali.');

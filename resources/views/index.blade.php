@@ -9,6 +9,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <style>
         .dataTables_wrapper .dataTables_length,
         .dataTables_wrapper .dataTables_info,
@@ -40,7 +43,7 @@
 
         <main class="flex-grow flex flex-col items-center justify-center text-center px-4 mt-28">
             <h1 class="text-3xl md:text-4xl font-bold mb-8">
-                MAU DISI APA?
+                MONITORING DOKUMEN KONTRAK PENGADAAN JASA 
             </h1>
 
             <div class="flex w-full max-w-md space-x-2 mb-24">
@@ -94,7 +97,7 @@
 
                     $('#searchButton').on('click', function (e) {
                         e.preventDefault();
-                        table.search($('#customSearchBox').val()).draw();
+                        table.column(4).search($('#customSearchBox').val()).draw();
                     });
 
                     $('#customSearchBox').on('keyup', function (e) {

@@ -17,12 +17,20 @@ use App\Http\Controllers\Jurubeli1_11Controller;
 use App\Http\Controllers\Jurubeli1_12Controller;
 use App\Http\Controllers\Jurubeli1_13Controller;
 use App\Http\Controllers\Jurubeli1_14Controller;
+use App\Http\Controllers\Kepalabiro1_1Controller;
+use App\Http\Controllers\Kepalabiro1_2Controller;
+use App\Http\Controllers\Kepalabiro1_3Controller;
+use App\Http\Controllers\KepaladepartemenController;
+use App\Http\Controllers\KepalaDivisiController;
 
 
 //Login & Logout
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Tampilkan file PDF (akses dari Jurubeli dan lainnya)
+Route::get('/dokumen/{id}/view', [App\Http\Controllers\VendorController::class, 'showFile'])->name('dokumen.view');
 
 //Vendor
 Route::get('/', [VendorController::class, 'index'])->name('home');
@@ -129,3 +137,36 @@ Route::get('/Jurubeli1_14/{id}', [Jurubeli1_14Controller::class, 'show'])->name(
 Route::post('/Jurubeli1_14/{id}/setujui', [Jurubeli1_14Controller::class, 'setujui'])->name('Jurubeli1_14.setujui');
 Route::post('/Jurubeli1_14/{id}/tolak', [Jurubeli1_14Controller::class, 'tolak'])->name('Jurubeli1_14.tolak');
 Route::get('/Jurubeli1_14/{id}/json', [Jurubeli1_14Controller::class, 'showJson'])->name('Jurubeli1_14.showJson');
+
+//Kepala Biro 1
+Route::get('/Kepalabiro1_1', [Kepalabiro1_1Controller::class, 'index'])->name('Kepalabiro1_1.index');
+Route::get('/Kepalabiro1_1/{id}', [Kepalabiro1_1Controller::class, 'show'])->name('Kepalabiro1_1.show');
+Route::get('/Kepalabiro1_1/{id}/json', [Kepalabiro1_1Controller::class, 'showJson'])->name('Kepalabiro1_1.showJson');
+Route::post('/Kepalabiro1_1/{id}/setujui', [Kepalabiro1_1Controller::class, 'setujui'])->name('Kepalabiro1_1.setujui');
+Route::post('/Kepalabiro1_1/{id}/tolak', [Kepalabiro1_1Controller::class, 'tolak'])->name('Kepalabiro1_1.tolak');
+
+//Kepala Biro 2
+Route::get('/Kepalabiro1_2', [Kepalabiro1_2Controller::class, 'index'])->name('Kepalabiro1_2.index');
+Route::get('/Kepalabiro1_2/{id}', [Kepalabiro1_2Controller::class, 'show'])->name('Kepalabiro1_2.show');
+Route::get('/Kepalabiro1_2/{id}/json', [Kepalabiro1_2Controller::class, 'showJson'])->name('Kepalabiro1_2.showJson');
+Route::post('/Kepalabiro1_2/{id}/setujui', [Kepalabiro1_2Controller::class, 'setujui'])->name('Kepalabiro1_2.setujui');
+Route::post('/Kepalabiro1_2/{id}/tolak', [Kepalabiro1_2Controller::class, 'tolak'])->name('Kepalabiro1_2.tolak');
+
+//Kepala Biro 3
+Route::get('/Kepalabiro1_3', [Kepalabiro1_3Controller::class, 'index'])->name('Kepalabiro1_3.index');
+Route::get('/Kepalabiro1_3/{id}', [Kepalabiro1_3Controller::class, 'show'])->name('Kepalabiro1_3.show');
+Route::get('/Kepalabiro1_3/{id}/json', [Kepalabiro1_3Controller::class, 'showJson'])->name('Kepalabiro1_3.showJson');
+Route::post('/Kepalabiro1_3/{id}/setujui', [Kepalabiro1_3Controller::class, 'setujui'])->name('Kepalabiro1_3.setujui');
+Route::post('/Kepalabiro1_3/{id}/tolak', [Kepalabiro1_3Controller::class, 'tolak'])->name('Kepalabiro1_3.tolak');
+
+//Kepala Departemen
+Route::get('/KepalaDepartemen', [KepaladepartemenController::class, 'index'])->name('KepalaDepartemen.index');
+Route::get('/KepalaDepartemen/{id}', [KepaladepartemenController::class, 'show'])->name('KepalaDepartemen.show');
+Route::get('/KepalaDepartemen/{id}/json', [KepaladepartemenController::class, 'showJson'])->name('KepalaDepartemen.showJson');
+Route::post('/KepalaDepartemen/{id}/setujui', [KepaladepartemenController::class, 'setujui'])->name('KepalaDepartemen.setujui');
+Route::post('/KepalaDepartemen/{id}/tolak', [KepaladepartemenController::class, 'tolak'])->name('KepalaDepartemen.tolak');
+
+//Kepala Divisi
+Route::get('/KepalaDivisi', [KepalaDivisiController::class, 'index'])->name('KepalaDivisi.index');
+Route::get('/KepalaDivisi/show/{id}', [KepalaDivisiController::class, 'show'])->name('KepalaDivisi.show');
+Route::get('/KepalaDivisi/{id}/json', [KepalaDivisiController::class, 'showJson'])->name('KepalaDivisi.showJson');
